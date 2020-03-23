@@ -161,12 +161,12 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  overflow: scroll;
+  overflow-y: auto;
 }
 
 .map-container {
   height: 80vh !important;
-  width: 70vw !important;
+  width: 100% !important;
   min-height: 600px !important;
   min-width: 600px !important;
 }
@@ -193,10 +193,14 @@ h2 {
 
 .selector {
   padding: 1rem;
+  height: 100%;
+  min-width: 150px;
+  padding-bottom: 2rem;
 }
 
 a {
   text-decoration: none;
+  color: #8daac4;
 }
 
 .github-icon {

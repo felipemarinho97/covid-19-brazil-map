@@ -1,6 +1,6 @@
 <h1 align="center">🦠 COVID-19 Brazil Map</h1>
 <p align="center">
-  <strong>Mapa interativo de casos do (COVID-19) em cada estado do Brasil</strong>
+  <strong>Mapa interativo de casos do (COVID-19) em cada estado do Brasil</strong><br/>
   <a href="https://felipemarinho97.github.io/covid-19-brazil-map/">https://felipemarinho97.github.io/covid-19-brazil-map/</a>
 </p>
 

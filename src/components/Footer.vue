@@ -1,6 +1,9 @@
 <template>
   <div class="info-container">
-    <a class="github-icon" href="https://github.com/felipemarinho97/covid-19-brazil-map">
+    <a
+      class="github-icon"
+      href="https://github.com/felipemarinho97/covid-19-brazil-map"
+    >
       <svg
         data-v-37df6889
         xmlns="http://www.w3.org/2000/svg"
@@ -18,16 +21,20 @@
     </a>
     <p>
       Dados obtidos por
-      <a
-        href="https://covid19-brazil-api.now.sh"
-        target="_blank"
-      >https://covid19-brazil-api.now.sh</a>
+      <a href="https://covid19-brazil-api.now.sh" target="_blank"
+        >https://covid19-brazil-api.now.sh</a
+      >
       - Copyleft ® Felipe Marinho
     </p>
   </div>
 </template>
 
 <script>
+import Raphael from "raphael/raphael";
+import jQuery from "jquery";
+global.Raphael = Raphael;
+global.jQuery = jQuery;
+
 export default { name: "Footer" };
 </script>
 

@@ -10,8 +10,11 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^2.6.5",
+    "jquery": "^3.4.1",
     "vue": "^2.6.10",
     "vue-choropleth": "^0.3.1",
+    "vue-morris": "^1.1.0",
+    "vue-slider-component": "^3.1.1",
     "vue2-leaflet": "^2.5.2"
   },
   "devDependencies": {

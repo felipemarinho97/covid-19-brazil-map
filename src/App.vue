@@ -4,14 +4,38 @@
       <h1>Mapa do COVID-19 por estados brasileiros 🇧🇷</h1>
     </div>
     <div class="map-dashboard">
-      <div class="dash-control">
-        <div class="info-container selector">
+      <div class="dash-control left" style="width:  30%">
+        <div class="info-container selector date-selector">
           <h2>Escolher data:</h2>
-          <select v-model="selectedDate" @change="onDateChange()">
+          <select v-model="selectedDate[1]" @change="onDateChange()">
             <option v-for="day in datesUntilToday" :key="day" :value="day">{{
               day
             }}</option>
           </select>
+        </div>
+        <div class="info-container selector timer-selector">
+          <h2>Controles:</h2>
+          <form>
+            <input type="checkbox" id="checkbox" v-model="autoUpdates" />
+            <label for="checkbox" style="color: rgba(229, 229, 229, 0.77)">
+              Auto-atualizar</label
+            >
+          </form>
+        </div>
+        <div class="info-container">
+          <h2>{{ regiao }}</h2>
+          <line-chart
+            id="line"
+            :data="lineData"
+            xkey="date"
+            ykeys='[ "cases", "deaths" ]'
+            :resize="true"
+            gridTextSize="8"
+            smooth="true"
+            labels='[ "Casos confirmados", "Mortes" ]'
+            line-colors='[ "#36A2EB", "#FF6384" ]'
+          >
+          </line-chart>
         </div>
       </div>
       <div class="center-container">
@@ -23,6 +47,7 @@
           :zone="regiao"
         ></interactive-map>
         <vue-slider
+          class="date-slider"
           @change="onDateChange()"
           :tooltip="'always'"
           :marks="true"
@@ -54,7 +79,7 @@
         <div class="info-container selector">
           <h2>Região:</h2>
           <select v-model="regiao" @change="onFilterChange()">
-            <option key="0" value="Tudo">Tudo</option>
+            <option key="0" value="Brasil">Brasil</option>
             <option key="1" value="Norte">Norte</option>
             <option key="2" value="Nordeste">Nordeste</option>
             <option key="3" value="Sul">Sul</option>
@@ -73,32 +98,47 @@ import {
   determineZoom,
   determineCenter,
   getDaysArray,
-  getAllFullReports
+  getAllFullReports,
+  getLineData,
+  isMobile
 } from "./util";
 import axios from "axios";
 import InteractiveMap from "./components/InteractiveMap";
 import Footer from "./components/Footer";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
+import { LineChart } from "vue-morris";
 
 export default {
   name: "app",
   components: {
     VueSlider,
+    LineChart,
     "interactive-map": InteractiveMap,
     "v-footer": Footer
   },
   data() {
     return {
+      autoUpdates: !isMobile(),
+      updater: null,
+      lineData: [],
       reports: [],
-      selectedDate: new Date().toISOString().slice(0, 10),
+      selectedDate: ["2020-02-26", new Date().toISOString().slice(0, 10)],
       datesUntilToday: getDaysArray(new Date("2020-02-26")),
       departmentsData: [],
       center: [-15.752961, -57.854357],
       zoom: 4,
       metric: "cases",
-      regiao: "Tudo"
+      regiao: "Brasil"
     };
+  },
+  beforeUpdate() {
+    const startDate = this.datesUntilToday.indexOf(this.selectedDate[0]);
+    this.lineData = getLineData(
+      this.reports.slice(startDate),
+      this.datesUntilToday.slice(startDate),
+      this.regiao
+    );
   },
   mounted() {
     axios.get(`https://covid19-brazil-api.now.sh/api/report/v1`).then(res => {
@@ -110,7 +150,20 @@ export default {
       this.datesUntilToday = res.availableDates;
     });
 
-    setInterval(() => {
+    if (this.autoUpdates)
+      this.updater = setInterval(this.pushDateForward, 2000);
+  },
+  methods: {
+    onFilterChange() {
+      this.center = determineCenter(this.regiao);
+      this.zoom = determineZoom(this.regiao);
+    },
+    onDateChange() {
+      this.departmentsData = this.reports[
+        this.datesUntilToday.indexOf(this.selectedDate[1])
+      ];
+    },
+    pushDateForward() {
       let startIndex = this.datesUntilToday.indexOf(this.selectedDate[0]);
       let index = this.datesUntilToday.indexOf(this.selectedDate[1]) + 1;
 
@@ -122,22 +175,20 @@ export default {
         this.datesUntilToday[startIndex],
         this.datesUntilToday[index]
       ];
-    }, 2000);
-  },
-  methods: {
-    onFilterChange() {
-      this.center = determineCenter(this.regiao);
-      this.zoom = determineZoom(this.regiao);
-    },
-    onDateChange() {
-      this.departmentsData = this.reports[
-        this.datesUntilToday.indexOf(this.selectedDate[1])
-      ];
     }
   },
   watch: {
     selectedDate() {
       this.onDateChange();
+    },
+    autoUpdates(newProp, oldProp) {
+      if (newProp !== oldProp) {
+        if (this.autoUpdates) {
+          this.updater = setInterval(this.pushDateForward, 2000);
+        } else {
+          clearInterval(this.updater);
+        }
+      }
     }
   }
 };
@@ -178,7 +229,7 @@ export default {
   height: 100% !important;
   width: 100% !important;
   min-height: 600px !important;
-  min-width: 600px !important;
+  min-width: 400px !important;
 }
 
 .info-container {
@@ -211,11 +262,17 @@ a {
   text-decoration: none;
   color: #8daac4;
 }
+@media only screen and (min-width: 900px) {
+  .date-selector {
+    display: none;
+  }
+}
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 900px) {
   .map-container {
-    min-width: calc(100% - 0.8rem) !important;
-    width: calc(100% - 0.8rem) !important;
+    min-width: calc(100% - 2rem) !important;
+    width: calc(100% - 2rem) !important;
+    margin: 1rem !important;
   }
   .map-dashboard {
     flex-direction: column-reverse;
@@ -233,7 +290,18 @@ a {
   }
 
   .dash-control {
+    margin: auto;
     flex-direction: row;
+  }
+
+  .dash-control.left {
+    width: 100% !important;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .date-slider {
+    display: none;
   }
 }
 

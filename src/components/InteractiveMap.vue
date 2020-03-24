@@ -7,6 +7,7 @@
     :options="mapOptions"
   >
     <l-choropleth-layer
+      :currentItem="item"
       :data="departmentsDataInternal"
       titleKey="state"
       idKey="uid"
@@ -78,6 +79,8 @@ export default {
   },
   data() {
     return {
+      testref: null,
+      item: null,
       brazilGeoJson: { ...brazil },
       departmentsDataInternal: [],
       chart: {
@@ -101,7 +104,7 @@ export default {
       this.value = extraValues.filter(val => val.key === this.metric)[0];
       this.chart.title = `Número de ${this.value.metric.toLowerCase()} por unidade federativa`;
 
-      if (this.zone === "Tudo") {
+      if (this.zone === "Brasil") {
         this.brazilGeoJson.features = [...brazil.features];
       } else {
         this.brazilGeoJson.features = brazil.features.filter(

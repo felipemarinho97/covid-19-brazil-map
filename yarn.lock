@@ -6991,7 +6991,7 @@ wcwidth@^1.0.1:
   dependencies:
     defaults "^1.0.3"
 
-webpack-bundle-analyzer@^3.3.0:
+webpack-bundle-analyzer@^3.3.0, webpack-bundle-analyzer@^3.6.1:
   version "3.6.1"
   resolved "https://registry.yarnpkg.com/webpack-bundle-analyzer/-/webpack-bundle-analyzer-3.6.1.tgz#bdb637c2304424f2fbff9a950c7be42a839ae73b"
   dependencies:

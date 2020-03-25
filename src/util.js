@@ -1,4 +1,4 @@
-import axios from "axios";
+import { get } from "axios";
 
 export function determineCenter(regiao) {
   switch (regiao) {
@@ -78,16 +78,14 @@ export function getAllFullReports(start, end = new Date()) {
   const dates = getDaysArray(start, end);
 
   const promises = dates.map(date => {
-    return axios
-      .get(
-        `https://covid19-brazil-api.now.sh/api/report/v1/brazil/${date.replace(
-          /-/g,
-          ""
-        )}`
-      )
-      .then(res => {
-        return { data: res.data.data, date };
-      });
+    return get(
+      `https://covid19-brazil-api.now.sh/api/report/v1/brazil/${date.replace(
+        /-/g,
+        ""
+      )}`
+    ).then(res => {
+      return { data: res.data.data, date };
+    });
   });
 
   return Promise.all(promises).then(res => {

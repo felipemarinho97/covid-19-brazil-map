@@ -102,12 +102,12 @@ import {
   getLineData,
   isMobile
 } from "./util";
-import axios from "axios";
+import { get } from "axios";
 import InteractiveMap from "./components/InteractiveMap";
 import Footer from "./components/Footer";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
-import { LineChart } from "vue-morris";
+import LineChart from "vue-morris/src/components/line-chart";
 
 export default {
   name: "app",
@@ -141,7 +141,7 @@ export default {
     );
   },
   mounted() {
-    axios.get(`https://covid19-brazil-api.now.sh/api/report/v1`).then(res => {
+    get(`https://covid19-brazil-api.now.sh/api/report/v1`).then(res => {
       this.departmentsData = [...res.data.data];
     });
 

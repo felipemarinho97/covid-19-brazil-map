@@ -301,7 +301,7 @@ a {
   }
 
   .date-slider {
-    display: none;
+    display: none !important;
   }
 }
 

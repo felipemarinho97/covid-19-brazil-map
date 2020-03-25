@@ -102,9 +102,14 @@ export default {
   },
   methods: {
     onUpdate() {
+      const time = this.departmentsData[0].datetime
+        .slice(0, 10)
+        .split("-")
+        .reverse()
+        .join("-");
       this.extraValues = extraValues.filter(val => val.key !== this.metric);
       this.value = extraValues.filter(val => val.key === this.metric)[0];
-      this.chart.title = `Número de ${this.value.metric.toLowerCase()} por unidade federativa`;
+      this.chart.title = `Nº de ${this.value.metric} por UF no ${this.zone} (${time})`;
 
       if (this.zone === "Brasil") {
         this.brazilGeoJson.features = [...brazil.features];

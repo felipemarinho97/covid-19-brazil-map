@@ -23,7 +23,7 @@
           </form>
         </div>
         <div class="info-container">
-          <h2>{{ regiao }}</h2>
+          <h2>Curva no {{ regiao }}</h2>
           <line-chart
             id="line"
             :data="lineData"
@@ -273,6 +273,8 @@ a {
     min-width: calc(100% - 2rem) !important;
     width: calc(100% - 2rem) !important;
     margin: 1rem !important;
+    min-height: 80vh !important;
+    max-height: 80vh !important;
   }
   .map-dashboard {
     flex-direction: column-reverse;

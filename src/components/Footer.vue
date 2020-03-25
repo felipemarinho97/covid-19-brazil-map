@@ -30,8 +30,8 @@
 </template>
 
 <script>
-import Raphael from "raphael/raphael";
-import jQuery from "jquery";
+import Raphael from "raphael/raphael.min";
+import jQuery from "jquery/dist/jquery.slim.min";
 global.Raphael = Raphael;
 global.jQuery = jQuery;
 

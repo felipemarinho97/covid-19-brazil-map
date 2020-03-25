@@ -37,8 +37,10 @@
 </template>
 
 <script>
-import { LMap } from "vue2-leaflet";
-import { InfoControl, ReferenceChart, ChoroplethLayer } from "vue-choropleth";
+import LMap from "vue2-leaflet/src/components/LMap";
+import InfoControl from "vue-choropleth/src/components/InfoControl";
+import ReferenceChart from "vue-choropleth/src/components/ReferenceChart";
+import ChoroplethLayer from "vue-choropleth/src/components/ChoroplethLayer";
 import brazil from "../data/brazil";
 
 const extraValues = [
